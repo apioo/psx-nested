@@ -29,7 +29,7 @@ namespace PSX\Nested\Field;
  */
 class Number extends TransformFieldAbstract
 {
-    protected function transform($value): ?float
+    protected function transform(mixed $value): ?float
     {
         if ($value === null) {
             return null;

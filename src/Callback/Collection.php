@@ -34,7 +34,7 @@ class Collection extends CallbackAbstract implements ProviderCollectionInterface
     private string|\Closure|null $key;
     private ?\Closure $filter;
 
-    public function __construct($callback, array $parameters, $definition, string|\Closure|null $key = null, ?\Closure $filter = null)
+    public function __construct(callable $callback, array $parameters, mixed $definition, string|\Closure|null $key = null, ?\Closure $filter = null)
     {
         parent::__construct($callback, $parameters, $definition);
 

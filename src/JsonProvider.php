@@ -57,6 +57,7 @@ class JsonProvider
 
     /**
      * @throws BuilderException
+     * @psalm-suppress RawObjectIteration
      */
     private function buildDefinition(\stdClass $payload, array $context, ?string $propertyName = null): mixed
     {
@@ -140,6 +141,10 @@ class JsonProvider
         }
     }
 
+    /**
+     * @throws BuilderException
+     * @psalm-suppress RawObjectIteration
+     */
     private function parseParams(mixed $params, array $context): array
     {
         if (!$params instanceof \stdClass) {

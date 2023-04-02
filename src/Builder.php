@@ -107,7 +107,7 @@ class Builder
         }
     }
 
-    public function doColumn(callable|string|array $source, array $arguments, $definition): ProviderColumnInterface
+    public function doColumn(callable|string|array $source, array $arguments, mixed $definition): ProviderColumnInterface
     {
         if (is_callable($source)) {
             return new Callback\Column($source, $arguments, $definition);
@@ -118,7 +118,7 @@ class Builder
         }
     }
 
-    public function doValue(callable|string|array $source, array $arguments, $definition): ProviderValueInterface
+    public function doValue(callable|string|array $source, array $arguments, mixed $definition): ProviderValueInterface
     {
         if (is_callable($source)) {
             return new Callback\Value($source, $arguments, $definition);
