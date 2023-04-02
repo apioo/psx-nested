@@ -20,10 +20,9 @@
 
 namespace PSX\Nested\Tests;
 
-use PHPUnit\Framework\TestCase;
-use PSX\Sql\Builder;
-use PSX\Sql\Field;
-use PSX\Sql\Provider\Map;
+use PSX\Nested\Builder;
+use PSX\Nested\Field;
+use PSX\Nested\Map;
 
 /**
  * FieldTest

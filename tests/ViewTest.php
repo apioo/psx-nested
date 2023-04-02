@@ -20,8 +20,7 @@
 
 namespace PSX\Nested\Tests;
 
-use PSX\Sql\TableManager;
-use PSX\Sql\TableManagerInterface;
+use PSX\Nested\Tests\View\TestView;
 
 /**
  * ViewAbstractTest
@@ -30,93 +29,52 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class ViewAbstractTest extends TableTestCase
+class ViewTest extends TableTestCase
 {
-    private TableManagerInterface $manager;
+    private TestView $view;
 
     protected function setUp(): void
     {
         parent::setUp();
         
-        $this->manager = new TableManager($this->connection);
-    }
-
-    protected function getTable(): TestView
-    {
-        return $this->manager->getTable(TestView::class);
+        $this->view = new TestView($this->connection);
     }
 
     public function testGetNestedResult()
     {
-        $result = $this->getTable()->getNestedResult();
+        $result = $this->view->getNestedResult();
         $actual = json_encode($result, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "totalResults": 4,
+    "totalResults": 2,
     "entries": [
-        {
-            "id": 4,
-            "title": "Blub",
-            "author": {
-                "id": "urn:profile:3",
-                "date": "2013-04-29T16:56:32Z"
-            },
-            "count": 4,
-            "tags": [
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32"
-            ]
-        },
-        {
-            "id": 3,
-            "title": "Test",
-            "author": {
-                "id": "urn:profile:2",
-                "date": "2013-04-29T16:56:32Z"
-            },
-            "count": 4,
-            "tags": [
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32"
-            ]
-        },
         {
             "id": 2,
             "title": "Bar",
             "author": {
                 "id": "urn:profile:1",
-                "date": "2013-04-29T16:56:32Z"
+                "name": "Foo Bar",
+                "uri": "https:\/\/phpsx.org"
             },
-            "count": 4,
             "tags": [
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32"
-            ]
+                "foo",
+                "bar"
+            ],
+            "date": "2016-03-01T00:00:00Z"
         },
         {
             "id": 1,
             "title": "Foo",
             "author": {
                 "id": "urn:profile:1",
-                "date": "2013-04-29T16:56:32Z"
+                "name": "Foo Bar",
+                "uri": "https:\/\/phpsx.org"
             },
-            "note": {
-                "comments": true,
-                "title": "foobar"
-            },
-            "count": 4,
             "tags": [
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32",
-                "2013-04-29 16:56:32"
-            ]
+                "foo",
+                "bar"
+            ],
+            "date": "2016-03-01T00:00:00Z"
         }
     ]
 }
@@ -127,37 +85,19 @@ JSON;
 
     public function testGetNestedResultKey()
     {
-        $result = $this->getTable()->getNestedResultKey();
+        $result = $this->view->getNestedResultKey();
         $actual = json_encode($result, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "eccbc87e": {
-        "id": 4,
-        "title": "Blub",
-        "author": {
-            "id": "urn:profile:3",
-            "date": "2013-04-29T16:56:32Z"
-        }
-    },
-    "c81e728d": {
-        "id": 3,
-        "title": "Test",
-        "author": {
-            "id": "urn:profile:2",
-            "date": "2013-04-29T16:56:32Z"
-        }
-    },
     "c4ca4238": {
         "id": 1,
         "title": "Foo",
         "author": {
             "id": "urn:profile:1",
-            "date": "2013-04-29T16:56:32Z"
+            "name": "Foo Bar",
+            "uri": "https:\/\/phpsx.org"
         },
-        "note": {
-            "comments": true,
-            "title": "foobar"
-        }
+        "date": "2016-03-01T00:00:00Z"
     }
 }
 JSON;
@@ -167,7 +107,7 @@ JSON;
 
     public function testGetNestedResultFilter()
     {
-        $result = $this->getTable()->getNestedResultFilter();
+        $result = $this->view->getNestedResultFilter();
         $actual = json_encode($result, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 [
@@ -176,20 +116,20 @@ JSON;
         "title": "Bar",
         "author": {
             "id": "urn:profile:1",
-            "date": "2013-04-29T16:56:32Z"
-        }
+            "name": "Foo Bar",
+            "uri": "https:\/\/phpsx.org"
+        },
+        "date": "2016-03-01T00:00:00Z"
     },
     {
         "id": 1,
         "title": "Foo",
         "author": {
             "id": "urn:profile:1",
-            "date": "2013-04-29T16:56:32Z"
+            "name": "Foo Bar",
+            "uri": "https:\/\/phpsx.org"
         },
-        "note": {
-            "comments": true,
-            "title": "foobar"
-        }
+        "date": "2016-03-01T00:00:00Z"
     }
 ]
 JSON;
@@ -199,7 +139,7 @@ JSON;
 
     public function testGetNestedResultFields()
     {
-        $result = $this->getTable()->getNestedResultFields();
+        $result = $this->view->getNestedResultFields();
         $actual = json_encode($result, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {

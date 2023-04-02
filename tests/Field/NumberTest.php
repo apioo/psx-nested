@@ -21,7 +21,7 @@
 namespace PSX\Nested\Tests\Field;
 
 use PHPUnit\Framework\TestCase;
-use PSX\Sql\Field\Number;
+use PSX\Nested\Field\Number;
 
 /**
  * NumberTest

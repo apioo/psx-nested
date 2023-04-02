@@ -21,7 +21,7 @@
 namespace PSX\Nested\Field;
 
 use Closure;
-use PSX\Sql\FieldInterface;
+use PSX\Nested\FieldInterface;
 
 /**
  * Callback

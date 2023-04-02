@@ -48,7 +48,7 @@ class MapTest extends ProviderTestCase
 
         $author = [
             'name' => 'Foo Bar',
-            'uri' => 'http://phpsx.org'
+            'uri' => 'https://phpsx.org'
         ];
 
         return [

@@ -39,11 +39,11 @@ class DBALTest extends ProviderTestCase
 
         return [
             'totalEntries' => $provider->newValue('SELECT COUNT(*) AS cnt FROM psx_sql_provider_news', [], new Field\Integer('cnt')),
-            'entries' => $provider->newCollection('SELECT id, authorId, title, createDate FROM psx_sql_provider_news ORDER BY id ASC LIMIT :startIndex, 8', ['startIndex' => 0], [
+            'entries' => $provider->newCollection('SELECT id, author_id, title, create_date FROM psx_sql_provider_news ORDER BY id ASC LIMIT :startIndex, 8', ['startIndex' => 0], [
                 'id' => new Field\Integer('id'),
                 'title' => 'title',
                 'tags' => $provider->newColumn('SELECT title FROM psx_sql_provider_news', [], 'title'),
-                'author' => $provider->newEntity('SELECT id, name, uri FROM psx_sql_provider_author WHERE id = :id', ['id' => new Reference('authorId')], [
+                'author' => $provider->newEntity('SELECT id, name, uri FROM psx_sql_provider_author WHERE id = :id', ['id' => new Reference('author_id')], [
                     'displayName' => 'name',
                     'uri' => 'uri',
                 ]),

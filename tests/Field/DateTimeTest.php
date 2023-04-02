@@ -21,7 +21,7 @@
 namespace PSX\Nested\Tests\Field;
 
 use PHPUnit\Framework\TestCase;
-use PSX\Sql\Field\DateTime;
+use PSX\Nested\Field\DateTime;
 
 /**
  * DateTimeTest

@@ -22,7 +22,7 @@ namespace PSX\Nested\Tests;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use PSX\Sql\Builder;
+use PSX\Nested\Builder;
 use PSX\Sql\Test\DatabaseTestCaseTrait;
 
 /**
@@ -71,7 +71,7 @@ abstract class ProviderTestCase extends TestCase
             ],
             "author": {
                 "displayName": "Foo Bar",
-                "uri": "http:\/\/phpsx.org"
+                "uri": "https:\/\/phpsx.org"
             }
         },
         {
@@ -83,7 +83,7 @@ abstract class ProviderTestCase extends TestCase
             ],
             "author": {
                 "displayName": "Foo Bar",
-                "uri": "http:\/\/phpsx.org"
+                "uri": "https:\/\/phpsx.org"
             }
         }
     ]

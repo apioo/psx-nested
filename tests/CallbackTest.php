@@ -76,7 +76,7 @@ class CallbackTest extends ProviderTestCase
 
         return [
             'name' => 'Foo Bar',
-            'uri' => 'http://phpsx.org'
+            'uri' => 'https://phpsx.org'
         ];
     }
 

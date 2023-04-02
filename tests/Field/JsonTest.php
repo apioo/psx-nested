@@ -21,7 +21,7 @@
 namespace PSX\Nested\Tests\Field;
 
 use PHPUnit\Framework\TestCase;
-use PSX\Sql\Field\Json;
+use PSX\Nested\Field\Json;
 
 /**
  * JsonTest

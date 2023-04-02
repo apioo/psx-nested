@@ -18,15 +18,11 @@
  * limitations under the License.
  */
 
-namespace PSX\Nested\Tests;
+namespace PSX\Nested\Tests\View;
 
 use Doctrine\DBAL\Connection;
 use PSX\Nested\Builder;
-use PSX\Sql\Reference;
-use PSX\Sql\TableInterface;
-use PSX\Sql\Tests\Generator\HandlerCommentTable;
-use PSX\Sql\Tests\Generator\TableCommandTestTable;
-use PSX\Sql\ViewAbstract;
+use PSX\Nested\Reference;
 
 /**
  * TestView
@@ -37,32 +33,31 @@ use PSX\Sql\ViewAbstract;
  */
 class TestView
 {
+    private Connection $connection;
     private Builder $builder;
 
     public function __construct(Connection $connection)
     {
+        $this->connection = $connection;
         $this->builder = new Builder($connection);
     }
 
     public function getNestedResult()
     {
         $definition = [
-            'totalResults' => $this->builder->getTable(HandlerCommentTable::class)->getCount(),
-            'entries' => $this->builder->doCollection([$this->getTable(HandlerCommentTable::class), 'findAll'], [], [
+            'totalResults' => $this->builder->doValue('SELECT COUNT(*) AS cnt FROM psx_sql_provider_news', [], $this->builder->fieldInteger('cnt')),
+            'entries' => $this->builder->doCollection('SELECT * FROM psx_sql_provider_news ORDER BY id DESC', [], [
                 'id' => $this->builder->fieldInteger('id'),
                 'title' => $this->builder->fieldCallback('title', function($title){
                     return ucfirst($title);
                 }),
-                'author' => [
-                    'id' => $this->builder->fieldFormat('userId', 'urn:profile:%s'),
-                    'date' => $this->builder->fieldDateTime('date'),
-                ],
-                'note' => $this->builder->doEntity([$this->getTable(TableCommandTestTable::class), 'findOneById'], [new Reference('id')], [
-                    'comments' => true,
-                    'title' => 'col_text',
+                'author' => $this->builder->doEntity('SELECT * FROM psx_sql_provider_author WHERE id = ?', [new Reference('author_id')], [
+                    'id' => $this->builder->fieldFormat('id', 'urn:profile:%s'),
+                    'name' => 'name',
+                    'uri' => 'uri',
                 ]),
-                'count' => $this->builder->doValue('SELECT COUNT(*) AS cnt FROM psx_handler_comment', [], $this->builder->fieldInteger('cnt')),
-                'tags' => $this->builder->doColumn('SELECT date FROM psx_handler_comment', [], 'date'),
+                'tags' => $this->builder->doColumn('SELECT title FROM psx_sql_provider_news', [], 'title'),
+                'date' => $this->builder->fieldDateTime('create_date'),
             ])
         ];
 
@@ -71,21 +66,19 @@ class TestView
 
     public function getNestedResultKey()
     {
-        $definition = $this->builder->doCollection([$this->getTable(HandlerCommentTable::class), 'findAll'], [], [
+        $definition = $this->builder->doCollection('SELECT * FROM psx_sql_provider_news ORDER BY id DESC', [], [
             'id' => $this->builder->fieldInteger('id'),
             'title' => $this->builder->fieldCallback('title', function($title){
                 return ucfirst($title);
             }),
-            'author' => [
-                'id' => $this->builder->fieldFormat('userId', 'urn:profile:%s'),
-                'date' => $this->builder->fieldDateTime('date'),
-            ],
-            'note' => $this->builder->doEntity([$this->getTable(TableCommandTestTable::class), 'findOneById'], [new Reference('id')], [
-                'comments' => true,
-                'title' => 'col_text',
-            ])
+            'author' => $this->builder->doEntity('SELECT * FROM psx_sql_provider_author WHERE id = ?', [new Reference('author_id')], [
+                'id' => $this->builder->fieldFormat('id', 'urn:profile:%s'),
+                'name' => 'name',
+                'uri' => 'uri',
+            ]),
+            'date' => $this->builder->fieldDateTime('create_date'),
         ], function($row){
-            return substr(md5($row['userId']), 0, 8);
+            return substr(md5($row['author_id']), 0, 8);
         });
 
         return $this->builder->build($definition);
@@ -93,19 +86,17 @@ class TestView
 
     public function getNestedResultFilter()
     {
-        $definition = $this->builder->doCollection([$this->getTable(HandlerCommentTable::class), 'findAll'], [], [
+        $definition = $this->builder->doCollection('SELECT * FROM psx_sql_provider_news ORDER BY id DESC', [], [
             'id' => $this->builder->fieldInteger('id'),
             'title' => $this->builder->fieldCallback('title', function($title){
                 return ucfirst($title);
             }),
-            'author' => [
-                'id' => $this->builder->fieldFormat('userId', 'urn:profile:%s'),
-                'date' => $this->builder->fieldDateTime('date'),
-            ],
-            'note' => $this->builder->doEntity([$this->getTable(TableCommandTestTable::class), 'findOneById'], [new Reference('id')], [
-                'comments' => true,
-                'title' => 'col_text',
-            ])
+            'author' => $this->builder->doEntity('SELECT * FROM psx_sql_provider_author WHERE id = ?', [new Reference('author_id')], [
+                'id' => $this->builder->fieldFormat('id', 'urn:profile:%s'),
+                'name' => 'name',
+                'uri' => 'uri',
+            ]),
+            'date' => $this->builder->fieldDateTime('create_date'),
         ], null, function(array $result){
             return array_values(array_filter($result, function($row){
                 return $row['author']['id'] == 'urn:profile:1';

@@ -20,7 +20,7 @@
 
 namespace PSX\Nested\Field;
 
-use PSX\Sql\FieldInterface;
+use PSX\Nested\FieldInterface;
 
 /**
  * TransformFieldAbstract

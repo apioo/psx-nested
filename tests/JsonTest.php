@@ -45,7 +45,7 @@ class JsonTest extends ProviderTestCase
     }
   },
   "entries": {
-    "$collection": "SELECT id, authorId, title, createDate FROM psx_sql_provider_news ORDER BY id ASC LIMIT :startIndex, 8",
+    "$collection": "SELECT id, author_id, title, create_date FROM psx_sql_provider_news ORDER BY id ASC LIMIT :startIndex, 8",
     "$params": {
       "startIndex": 0
     },
@@ -63,7 +63,7 @@ class JsonTest extends ProviderTestCase
         "$entity": "SELECT id, name, uri FROM psx_sql_provider_author WHERE id = :id",
         "$params": {
           "id": {
-            "$ref": "authorId"
+            "$ref": "author_id"
           }
         },
         "$definition": {
