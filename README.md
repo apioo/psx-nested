@@ -13,27 +13,30 @@ can combine multiple tables to produce a complex result.
 ```php
 <?php
 
+$connection = null; // a doctrine DBAL connection
+$builder = new \PSX\Nested\Builder($connection);
+
 $definition = [
     'totalResults' => $this->getTable(HandlerCommentTable::class)->getCount(),
-    'entries' => $this->doCollection([$this->getTable(HandlerCommentTable::class), 'findAll'], [], [
-        'id' => $this->fieldInteger('id'),
-        'title' => $this->fieldCallback('title', function($title){
+    'entries' => $builder->doCollection([$this->getTable(HandlerCommentTable::class), 'findAll'], [], [
+        'id' => $builder->fieldInteger('id'),
+        'title' => $builder->fieldCallback('title', function($title){
             return ucfirst($title);
         }),
         'author' => [
-            'id' => $this->fieldFormat('userId', 'urn:profile:%s'),
-            'date' => $this->fieldDateTime('date'),
+            'id' => $builder->fieldFormat('userId', 'urn:profile:%s'),
+            'date' => $builder->fieldDateTime('date'),
         ],
-        'note' => $this->doEntity([$this->getTable(TableCommandTestTable::class), 'findOneById'], [new Reference('id')], [
+        'note' => $builder->doEntity([$this->getTable(TableCommandTestTable::class), 'findOneById'], [new Reference('id')], [
             'comments' => true,
             'title' => 'col_text',
         ]),
-        'count' => $this->doValue('SELECT COUNT(*) AS cnt FROM psx_handler_comment', [], $this->fieldInteger('cnt')),
-        'tags' => $this->doColumn('SELECT date FROM psx_handler_comment', [], 'date'),
+        'count' => $builder->doValue('SELECT COUNT(*) AS cnt FROM psx_handler_comment', [], $this->fieldInteger('cnt')),
+        'tags' => $builder->doColumn('SELECT date FROM psx_handler_comment', [], 'date'),
     ])
 ];
 
-return $this->build($definition);
+return $builder->build($definition);
 
 ```
 
