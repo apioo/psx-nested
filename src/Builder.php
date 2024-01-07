@@ -202,6 +202,10 @@ class Builder
                 }
             } elseif (is_string($key)) {
                 foreach ($data as $row) {
+                    if ($row instanceof RecordableInterface) {
+                        $row = $row->toRecord();
+                    }
+
                     $result[$row[$key]] = $this->build($definition, $row);
                 }
             } else {
