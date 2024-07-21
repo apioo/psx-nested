@@ -26,7 +26,7 @@ use PSX\Record\RecordableInterface;
 use PSX\Nested\Exception\BuilderException;
 
 /**
- * The build method resolves the definition through calling every provider and 
+ * The build method resolves the definition through calling every provider and
  * field objects. The result is an array in the format of the definition
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -231,9 +231,17 @@ class Builder
         } elseif ($provider instanceof ProviderColumnInterface) {
             $result = [];
             foreach ($data as $row) {
+                if ($row instanceof RecordableInterface) {
+                    $row = $row->toRecord();
+                }
+
                 $result[] = $this->build($definition, $row);
             }
         } elseif ($provider instanceof ProviderValueInterface) {
+            if ($data instanceof RecordableInterface) {
+                $data = $data->toRecord();
+            }
+
             $result = $this->build($definition, $data);
         }
 
