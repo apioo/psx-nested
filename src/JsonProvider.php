@@ -174,7 +174,7 @@ class JsonProvider
         $limit = $this->parseInt($payload->{'$limit'} ?? null, $context);
         $offset = $this->parseInt($payload->{'$offset'} ?? null, $context);
 
-        if (!empty($limit)) {
+        if ($limit !== null) {
             return $this->connection->getDatabasePlatform()->modifyLimitQuery($query, $limit, $offset ?? 0);
         } else {
             return $query;
