@@ -1,8 +1,6 @@
 
 # Nested
 
-## About
-
 This library helps to build complex nested JSON responses based on relational tables.
 
 ## Basic usage
